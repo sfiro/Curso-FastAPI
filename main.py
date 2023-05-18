@@ -5,6 +5,8 @@ from enum import Enum
 #pydantic
 from pydantic import BaseModel
 from pydantic import Field
+from pydantic import EmailStr
+from pydantic import PaymentCardNumber 
 
 #fastAPI
 from fastapi import FastAPI
@@ -22,9 +24,21 @@ class HairColor(Enum):
 
 
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str
+    city: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    state: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    country: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
 
 class Person(BaseModel):
     first_name : str = Field(
@@ -44,6 +58,8 @@ class Person(BaseModel):
         )
     hair_color : Optional[HairColor] = Field(default=None)
     is_married : Optional[bool] = Field(default=None)
+    email : EmailStr = Field(...)
+    #card : str = PaymentCardNumber()
 
 
 
