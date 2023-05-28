@@ -11,7 +11,7 @@ from pydantic import PaymentCardNumber
 #fastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body, Query, Path
+from fastapi import Body, Query, Path, Form
 
 app = FastAPI()
 
@@ -49,6 +49,7 @@ class Location(BaseModel):
             }
         }
 
+
 class PersonBase(BaseModel):
     first_name : str = Field(
         ...,
@@ -69,6 +70,7 @@ class PersonBase(BaseModel):
     is_married : Optional[bool] = Field(default=None)
     email : EmailStr = Field(...)
 
+
 class Person(PersonBase):
     password: str = Field(...,min_length=8)
 
@@ -86,10 +88,17 @@ class Person(PersonBase):
     #         }
     #     }
     
+
 class PersonOut(PersonBase):
     pass
     
 
+class LoginOut(BaseModel):
+    username: str = Field(
+        ...,
+        max_length=20,
+        example="debbie2022"
+        )
 
 @app.get(
         path = "/",
@@ -167,3 +176,14 @@ def update_person(
     results = person.dict()
     results.update(location.dict())
     return results
+
+@app.post(
+    path = "/login",
+    response_model = LoginOut,
+    status_code=status.HTTP_200_OK
+)
+def login(
+    username: str = Form(...),
+    password: str = Form(...)
+    ):
+    return LoginOut(username=username)
