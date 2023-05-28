@@ -39,6 +39,15 @@ class Location(BaseModel):
         min_length=1,
         max_length=50
         )
+    class Config:
+        schema_extra = {
+            "example": {
+                "city": "Pereira",
+                "state": "Risaralda",
+                "country": "Colombia",
+            }
+        }
+
 
 class Person(BaseModel):
     first_name : str = Field(
@@ -60,6 +69,18 @@ class Person(BaseModel):
     is_married : Optional[bool] = Field(default=None)
     email : EmailStr = Field(...)
     #card : str = PaymentCardNumber()
+    class Config:
+        schema_extra = {
+            "example": {
+                "first_name": "Debbie Johan",
+                "last_name": "Arredondo Arteaga",
+                "age": "31",
+                "hair_color": "black",
+                "is_married": False,
+                "email": "chevi6@gmail.com"
+            }
+        }
+    
 
 
 
