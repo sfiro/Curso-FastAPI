@@ -11,7 +11,7 @@ from pydantic import PaymentCardNumber
 #fastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body, Query, Path, Form, Header, Cookie
+from fastapi import Body, Query, Path, Form, Header, Cookie, UploadFile,File
 
 app = FastAPI()
 
@@ -215,3 +215,16 @@ def contact(
     ads: Optional[str] = Cookie(default=None)
 ):
     return user_agent
+
+
+@app.post(
+    path="/post-image"
+)
+def post_image(
+    image: UploadFile = File(...)
+):
+    return {
+        "filename": image.filename,
+        "format": image.content_type,
+        "size(kb)": round(len(image.file.read())/1024, ndigits=2)
+    }
