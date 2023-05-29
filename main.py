@@ -114,9 +114,21 @@ def home():
         path = "/person/new",
         response_model=PersonOut,
         status_code=status.HTTP_201_CREATED,
-        tags=["persons"]
+        tags=["persons"],
+        summary="Create Person in the app"
         )
 def create_person(person: Person = Body(...)):
+    """
+    Create person 
+
+    This path operation creates a person in the app and save the information in the database
+    
+    Parameters:
+    - Request Body parameter:
+        - **person: Person** -> A person model with first name, last name, age hair color and marital status
+
+    Returns a person model with first name, last name, age, hair color and marital status 
+    """
     return person
 
 #validaciones: query parameters
@@ -124,7 +136,8 @@ def create_person(person: Person = Body(...)):
 @app.get(
         path="/person/detail",
         status_code=status.HTTP_200_OK,
-        tags=["persons"]
+        tags=["persons"],
+        summary="given a Name and Age"
         )
 def show_person(
     name: Optional[str] = Query(
@@ -142,6 +155,16 @@ def show_person(
         example=25
         )
 ):
+    """
+    Show a person 
+
+    Parameters:
+    - Query parameters
+        - an optional name
+        - an age that it's required 
+
+    Returns the name and the age 
+    """
     return {name: age}
 
 #validaciones: path parameters
@@ -150,7 +173,8 @@ persons = [1,2,3,4,5]
 @app.get(
         path="/person/detail/{person_id}",
         status_code=status.HTTP_200_OK,
-        tags=["persons"]
+        tags=["persons"],
+        summary="Get the person based in an ID"
         )
 def show_person(
     person_id: int = Path(
@@ -159,6 +183,16 @@ def show_person(
         example=123
         )
 ):
+    """
+    Show a person 
+
+    this path operation returns a person if it exist in a list 
+
+    Parameters
+        - an **person_id** that it must to be greater than cero 
+
+    returns the confirmation of existence 
+    """
     if person_id not in persons:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
